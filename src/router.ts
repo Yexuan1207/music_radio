@@ -1,0 +1,77 @@
+import component from 'element-plus/es/components/tree-select/src/tree-select-option.mjs'
+import { createRouter, createWebHashHistory } from 'vue-router'
+const Discovery = () => import('@/page/discovery/index.vue')
+const Search = () => import('@/page/search/index.vue')
+const Songs = () => import('@/page/songs/index.vue')
+const Playlists = () => import('@/page/playlists/index.vue')
+const Mvs = () => import('@/page/mvs/index.vue')
+const SearchMvs = () => import('@/page/search/mvs.vue')
+const PlaylistDetail = () => import('@/page/playlist-detail/index.vue')
+// 内容需要居中的页面
+export const layoutCenterNames = ['discovery', 'playlists', 'songs', 'mvs']
+//未登录时候的菜单页面
+export const menuRoutes = [
+    {
+        path: '/discovery',
+        name: 'discovery',
+        component: Discovery,
+        meta: {
+            title: '发现音乐',
+            icon: "hugeicons:audio-book-02"
+
+        },
+    },
+    {
+        path: '/songs',
+        name: 'songs',
+        component: Songs,
+        meta: {
+            title: "最新音乐",
+            icon: 'lucide:music-4',
+        }
+    },
+    {
+        path: '/playlists',
+        name: 'playlists',
+        component: Playlists,
+        meta: {
+            title: "推荐歌单",
+            icon: "hugeicons:calendar-love-01"
+        }
+    },
+    {
+        path: '/mvs',
+        name: 'mvs',
+        component: Mvs,
+        meta: {
+            title: "最新MV",
+            icon: "lucide:youtube"
+        }
+    }
+]
+const routes = [
+    ...menuRoutes,
+    { path: '/', redirect: '/discovery' },
+    {
+        path: '/playlist/:id',
+        name: 'playlistDetail',
+        component: PlaylistDetail,
+    },
+    {
+        path: '/search/:keyword',
+        name: 'search',
+        component: Search,
+        //Vue Router 会自动将路由参数 (keywords) 作为 props 传递给对应的组件 (Search 组件)。
+        props: true,
+        children: [
+            { path: "", component: Songs, name: 'songs' },
+
+        ]
+    },
+]
+
+const router = createRouter({
+    history: createWebHashHistory(),
+    routes
+})
+export default router

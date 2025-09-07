@@ -1,0 +1,76 @@
+// 让文本在一行内超出内容时显示为“…”。
+@mixin text-ellipsis() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+// 可以让文本最多显示 $line 行，多余的行用省略号显示
+@mixin text-ellipsis-multi($line) {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+}
+// 作用：弹性盒子水平/垂直居中
+// 参数：$direction 默认 row，可设为 column
+@mixin flex-center($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: center;
+  justify-content: center;
+}
+// 作用：统一的阴影样式
+// 用途：快速为元素添加阴影效果。
+@mixin box-shadow {
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
+}
+// 用途：用于需要固定尺寸的图片外壳。
+@mixin img-wrap($width, $height: $width) {
+  width: $width;
+  height: $height;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+// 作用：绝对定位铺满父容器
+// 用途：让元素在父元素内绝对定位并撑满全部空间。
+@mixin abs-stretch {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  right: 0;
+}
+// 用途：让元素在父容器中心位置。
+@mixin abs-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+// 参数：直径 $d
+// 用途：制作头像等圆形元素。
+@mixin round($d) {
+  width: $d;
+  height: $d;
+  border-radius: 50%;
+}
+// 参数：每个 item 的宽度
+// 用途：快速生成带间距、自动换行的列表布局。
+@mixin list($item-width) {
+  .list-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -12px;
+
+    .list-item {
+      width: $item-width;
+      margin-bottom: 36px;
+      padding: 0 12px;
+    }
+  }
+}
