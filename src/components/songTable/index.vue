@@ -86,13 +86,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, inject, ref } from "vue";
 import { ElTable } from "element-plus";
 import type { Song } from "./type";
 import useMusicStore from "@/store/music";
 import { formatTime, getImgUrl, pad } from "@/utils";
-import { size } from "lodash-es";
-
+import { goMvWidthCheck } from "@/utils";
 const musicStore = useMusicStore();
 const props = defineProps<{
   songs: any[];
@@ -100,6 +99,7 @@ const props = defineProps<{
   hideColums?: string[];
   renderNameDesc?: Function;
 }>();
+// const $utils: any = inject("utils");
 
 const columns = [
   {
@@ -150,7 +150,7 @@ const onRowClick = (song: Song) => {
 };
 //点击mv
 const onGoMv = (mvId: number) => {
-  console.log("go to mv");
+  goMvWidthCheck(mvId);
 };
 //单元格激活样式
 const getActiveStyleText = (row: Song) => {

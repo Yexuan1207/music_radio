@@ -7,6 +7,7 @@ const Playlists = () => import('@/page/playlists/index.vue')
 const Mvs = () => import('@/page/mvs/index.vue')
 const SearchMvs = () => import('@/page/search/mvs.vue')
 const PlaylistDetail = () => import('@/page/playlist-detail/index.vue')
+const Mv = () => import('@/page/mv/index.vue')
 // 内容需要居中的页面
 export const layoutCenterNames = ['discovery', 'playlists', 'songs', 'mvs']
 //未登录时候的菜单页面
@@ -22,15 +23,6 @@ export const menuRoutes = [
         },
     },
     {
-        path: '/songs',
-        name: 'songs',
-        component: Songs,
-        meta: {
-            title: "最新音乐",
-            icon: 'lucide:music-4',
-        }
-    },
-    {
         path: '/playlists',
         name: 'playlists',
         component: Playlists,
@@ -39,6 +31,16 @@ export const menuRoutes = [
             icon: "hugeicons:calendar-love-01"
         }
     },
+    {
+        path: '/songs',
+        name: 'songs',
+        component: Songs,
+        meta: {
+            title: "最新音乐",
+            icon: 'lucide:music-4',
+        }
+    },
+
     {
         path: '/mvs',
         name: 'mvs',
@@ -64,10 +66,17 @@ const routes = [
         //Vue Router 会自动将路由参数 (keywords) 作为 props 传递给对应的组件 (Search 组件)。
         props: true,
         children: [
-            { path: "", component: Songs, name: 'songs' },
-
+            { path: "", component: Songs, name: 'searchSongs' },
         ]
     },
+    {
+        path: '/mv/:id',
+        name: 'mv',
+        component: Mv,
+        props: (route: any) => ({
+            id: +route.params.id
+        })
+    }
 ]
 
 const router = createRouter({

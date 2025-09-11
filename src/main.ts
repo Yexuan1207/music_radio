@@ -5,6 +5,7 @@ import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import './style/index.scss'
 import './utils/rem'
+import 'xgplayer/dist/index.min.css'
 import { createPinia } from 'pinia'
 import GlobalComponents from './utils/global'
 

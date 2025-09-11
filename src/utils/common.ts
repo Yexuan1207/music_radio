@@ -1,3 +1,4 @@
+import { ElMessage } from 'element-plus'
 
 
 export { debounce, throttle } from 'lodash-es'
@@ -51,6 +52,25 @@ export const getPageOffset = (page: number, limit: number) => {
 
 export const isLast = (index: number, list: any[]) => {
     return index === list.length - 1
+}
+
+//提示
+type type = 'success' | 'error' | 'info' | 'warning'
+export const notify = (message: string, type: type) => {
+    const params = {
+        message,
+        duration: 1500
+    }
+    return type ? ElMessage[type](params) : ElMessage(params)
+}
+
+
+//格式化数据
+export const formatData = (num: number) => {
+    //转换失败为0
+    num = Number(num) || 0
+    //四舍五入
+    return num > 10000 ? `${Math.round(num / 10000)}万` : num
 }
 //格式化事件
 // export const formatDate = (date: any, fmt = 'yyyy-MM-dd hhh:mm:ss') => {

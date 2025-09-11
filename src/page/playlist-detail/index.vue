@@ -88,7 +88,7 @@ const init = async () => {
   await getSongList(playlistData);
 };
 const getSongList = async (playlistData: Playlist) => {
-  const trackIds = playlistData.trackIds.map(({ id }) => id) || [];
+  const trackIds = playlistData.trackIds.map(({ id }) => id);
   const songDetails = await getSongDetail(trackIds.slice(0, MAX));
   const newSongs = songDetails.songs.map(({ id, name, al, ar, mv, dt }) =>
     createSong({
