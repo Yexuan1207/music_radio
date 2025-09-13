@@ -40,6 +40,7 @@ declare module 'vue' {
     SongTable: typeof import('./src/components/songTable/index.vue')['default']
     Theme: typeof import('./src/components/theme/theme.vue')['default']
     Toggle: typeof import('./src/components/Toggle/index.vue')['default']
+    TopPlaylistCard: typeof import('./src/components/topPlaylistCard/index.vue')['default']
     User: typeof import('./src/components/user/index.vue')['default']
   }
   export interface GlobalDirectives {

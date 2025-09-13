@@ -71,7 +71,7 @@
         <div v-if="column.prop === 'artistsText'">
           <HighlightText
             class="song-table-name"
-            :text="scope.row.artist"
+            :text="scope.row.artistsText"
             :highlightText="props.heighLightText"
           />
         </div>
@@ -93,12 +93,17 @@ import useMusicStore from "@/store/music";
 import { formatTime, getImgUrl, pad } from "@/utils";
 import { goMvWidthCheck } from "@/utils";
 const musicStore = useMusicStore();
-const props = defineProps<{
-  songs: any[];
-  heighLightText: string;
-  hideColums?: string[];
-  renderNameDesc?: Function;
-}>();
+const props = withDefaults(
+  defineProps<{
+    songs: any[];
+    heighLightText?: string;
+    hideColums?: string[];
+    renderNameDesc?: Function;
+  }>(),
+  {
+    heighLightText: "",
+  }
+);
 // const $utils: any = inject("utils");
 
 const columns = [
