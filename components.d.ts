@@ -42,6 +42,7 @@ declare module 'vue' {
     Toggle: typeof import('./src/components/Toggle/index.vue')['default']
     TopPlaylistCard: typeof import('./src/components/topPlaylistCard/index.vue')['default']
     User: typeof import('./src/components/user/index.vue')['default']
+    WithPagination: typeof import('./src/components/withPagination/index.vue')['default']
   }
   export interface GlobalDirectives {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']

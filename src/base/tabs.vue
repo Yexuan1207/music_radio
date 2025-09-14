@@ -4,23 +4,46 @@
     :class="{ [align]: true }"
     class="tab-wrap"
   >
-    <li
-      class="tab-item"
-      v-for="(tab, index) in normalizedTabs"
-      :key="index"
-      :class="getItemCls(tab, index)"
-      :style="getItemStyle(tab, index)"
-      @click="onChangeTab(tab, index)"
-    >
-      <span class="title">{{ tab.title }}</span>
-    </li>
+    <template v-if="isRouteMode">
+      <router-link
+        v-for="(tab, index) in normalizedTabs"
+        :key="index"
+        :to="tab.to || ''"
+        custom
+        v-slot="{ navigate, isActive }"
+      >
+        <li
+          class="tab-item"
+          ref="routerLinks"
+          @click="navigate"
+          :style="getItemStyle(tab, index)"
+          :class="{ active: isActive, ['activeItemClass']: isActive }"
+        >
+          <span class="title">{{ tab.title }}</span>
+        </li>
+      </router-link>
+    </template>
+    <!-- 无路由跳转状态 -->
+    <template v-else>
+      <li
+        class="tab-item"
+        v-for="(tab, index) in normalizedTabs"
+        :key="index"
+        :class="getItemCls(tab, index)"
+        :style="getItemStyle(tab, index)"
+        @click="onChangeTab(tab, index)"
+      >
+        <span class="title">{{ tab.title }}</span>
+      </li>
+    </template>
   </ul>
 </template>
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, inject, ref } from "vue";
 defineOptions({
   name: "Tabs",
 });
+const $utils: any = inject("utils");
 type Tab = {
   title: string;
   to?: string;
@@ -39,10 +62,18 @@ const props = withDefaults(
   }>(),
   { align: "left" }
 );
+
+const isRouteMode = computed(() => {
+  return (
+    props.tabs.length &&
+    typeof props.tabs[0] !== "string" &&
+    $utils.isDef(props.tabs[0]?.to)
+  );
+});
 const emit = defineEmits<{
   (e: "update:active", active: number): void;
 }>();
-const normalizedTabs = computed(() => {
+const normalizedTabs = computed((): Tab[] => {
   return typeof props.tabs[0] === "string"
     ? (props.tabs as string[]).map((tab) => ({ title: tab }))
     : (props.tabs as Tab[]);

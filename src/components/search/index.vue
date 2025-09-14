@@ -56,7 +56,6 @@
             </div>
           </div>
           <!-- 初始时推荐 -->
-
           <div
             class="search-hots"
             v-else

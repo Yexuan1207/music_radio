@@ -108,3 +108,31 @@ export interface playInfoData {
     promotionVo: null;
     msg: string;
 }
+
+//getAllMvsApi
+export interface getAllMvsApiType {
+    data: MvType[];
+    [key: string]: any
+}
+
+export interface MvType {
+    id: number;
+    cover: string;
+    name: string;
+    playCount: number;
+    briefDesc: null;
+    desc: null;
+    artistName: string;
+    artistId: number;
+    duration: number;
+    mark: number;
+    subed: boolean;
+    artists: AllMvsArtistType[];
+}
+
+interface AllMvsArtistType {
+    id: number;
+    name: string;
+    alias: string[];
+    transNames: null;
+}

@@ -1,13 +1,15 @@
-import component from 'element-plus/es/components/tree-select/src/tree-select-option.mjs'
 import { createRouter, createWebHashHistory } from 'vue-router'
 const Discovery = () => import('@/page/discovery/index.vue')
-const Search = () => import('@/page/search/index.vue')
 const Songs = () => import('@/page/songs/index.vue')
 const Playlists = () => import('@/page/playlists/index.vue')
 const Mvs = () => import('@/page/mvs/index.vue')
-const SearchMvs = () => import('@/page/search/mvs.vue')
 const PlaylistDetail = () => import('@/page/playlist-detail/index.vue')
 const Mv = () => import('@/page/mv/index.vue')
+
+const Search = () => import('@/page/search/index.vue')
+const searchPlaylists = () => import('@/page/search/playlists.vue')
+const searchMvs = () => import('@/page/search/mvs.vue')
+const searchSongs = () => import('@/page/search/songs.vue')
 // 内容需要居中的页面
 export const layoutCenterNames = ['discovery', 'playlists', 'songs', 'mvs']
 //未登录时候的菜单页面
@@ -65,8 +67,11 @@ const routes = [
         component: Search,
         //Vue Router 会自动将路由参数 (keywords) 作为 props 传递给对应的组件 (Search 组件)。
         props: true,
+        redirect: (to: any) => ({ path: `/search/${to.params.keyword}/songs` }),
         children: [
-            { path: "", component: Songs, name: 'searchSongs' },
+            { path: 'songs', name: "searchSongs", component: searchSongs, props: (route: any) => ({ keyword: route.params.keyword }) },
+            { path: 'playlists', name: 'searchPlaylists', component: searchPlaylists, props: (route: any) => ({ keyword: route.params.keyword }) },
+            { path: 'mvs', name: 'searchMvs', component: searchMvs, props: (route: any) => ({ keyword: route.params.keyword }) }
         ]
     },
     {

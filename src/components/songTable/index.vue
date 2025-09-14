@@ -15,8 +15,8 @@
       :width="column.width"
       :class-name="column.className"
     >
-      <!-- 序号列 -->
       <template #default="scope">
+        <!-- 序号列 -->
         <div
           class="index-wrap"
           v-if="column.prop === 'index'"
@@ -65,6 +65,14 @@
               type="lucide:youtube"
             />
           </div>
+          <p v-if="scope.row.alias.length">
+            <HighlightText
+              v-for="item in scope.row.alias"
+              class="name-desc"
+              :text="item"
+              :highlightText="props.heighLightText"
+            />
+          </p>
         </div>
 
         <!-- 歌手 -->
@@ -98,7 +106,7 @@ const props = withDefaults(
     songs: any[];
     heighLightText?: string;
     hideColums?: string[];
-    renderNameDesc?: Function;
+    renderNameDesc?: string;
   }>(),
   {
     heighLightText: "",
@@ -182,6 +190,12 @@ const getActiveStyleText = (row: Song) => {
 // };
 </script>
 <style lang="scss" scoped>
+.name-desc {
+  display: block;
+  margin-top: 8px;
+  color: var(--font-color-grey-shallow);
+  @include text-ellipsis;
+}
 .song-table {
   &:hover {
     cursor: pointer;
