@@ -39,25 +39,25 @@ const currentPage = ref(1);
 const searchParams = computed(() => {
   return { keywords: searchRoot.props.keyword };
 });
-
 const onGetSearch = (data: getSearchSongTyep) => {
   const {
     result: { songCount: SongCountData, songs: SongsData },
   } = data;
-
-  songs.value = SongsData.map((song) => {
-    const { id, mvid, name, alias, artists, duration, album } = song;
-    return createSong({
-      id,
-      name,
-      alias,
-      artists,
-      duration,
-      mvId: mvid,
-      albumName: album.name,
-      albumId: album.id,
+  if (SongCountData) {
+    songs.value = SongsData.map((song) => {
+      const { id, mvid, name, alias, artists, duration, album } = song;
+      return createSong({
+        id,
+        name,
+        alias,
+        artists,
+        duration,
+        mvId: mvid,
+        albumName: album.name,
+        albumId: album.id,
+      });
     });
-  });
+  }
   songCount.value = SongCountData;
   searchRoot.onUpdateCount(SongCountData);
 };

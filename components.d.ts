@@ -35,6 +35,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     RoutesHistory: typeof import('./src/components/routes-history.vue')['default']
     Search: typeof import('./src/components/search/index.vue')['default']
+    Share: typeof import('./src/components/share/index.vue')['default']
     SongCard: typeof import('./src/components/songCard/index.vue')['default']
     SongTab: typeof import('./src/components/songTab/index.vue')['default']
     SongTable: typeof import('./src/components/songTable/index.vue')['default']
@@ -42,6 +43,7 @@ declare module 'vue' {
     Toggle: typeof import('./src/components/Toggle/index.vue')['default']
     TopPlaylistCard: typeof import('./src/components/topPlaylistCard/index.vue')['default']
     User: typeof import('./src/components/user/index.vue')['default']
+    Volume: typeof import('./src/components/Volume/index.vue')['default']
     WithPagination: typeof import('./src/components/withPagination/index.vue')['default']
   }
   export interface GlobalDirectives {

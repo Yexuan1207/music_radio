@@ -16,14 +16,13 @@ export type song = {
 
 export type createSong = {
 
-    mvid: number;
     id: number;
     name: string;
     artists: Artist2[];
     duration: number;
     albumName: string;
     url: string;
-    artist: string;
+    artistsText: string;
     durationSecond: number;
     albumId: number;
     mvId: number;

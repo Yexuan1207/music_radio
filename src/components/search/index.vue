@@ -144,11 +144,6 @@ const goSearch = (keyword: string) => {
   });
   searchPanelShow.value = false;
 };
-const onEnterPress = () => {
-  if (searchKeyword.value.trim()) {
-    goSearch(searchKeyword.value.trim());
-  }
-};
 
 //获取热搜
 onMounted(async () => {
@@ -220,7 +215,6 @@ const onClickSong = async (item: Song) => {
     name,
     artists,
     duration,
-    mvid,
     albumId,
     albumName,
     mvId: mvid,
@@ -236,6 +230,13 @@ const onClickPlaylist = (item: Playlist) => {
 };
 const onClickMV = (item: any) => {
   console.log(item);
+};
+
+const onEnterPress = () => {
+  if (searchKeyword.value.trim()) {
+    searchPanelShow.value = false;
+    goSearch(searchKeyword.value.trim());
+  }
 };
 </script>
 <style lang="scss" scoped>

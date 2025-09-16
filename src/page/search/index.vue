@@ -51,9 +51,9 @@ const props = defineProps<{
   keyword: string;
 }>();
 
-const count = ref(0);
+let count = ref(0);
 const headerRef = ref<HTMLDivElement>();
-const showEmpty = computed(() => {
+let showEmpty = computed(() => {
   return !globalStore.axiosLoading && count.value === 0;
 });
 

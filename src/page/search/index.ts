@@ -182,3 +182,37 @@ interface Creator {
     expertTags: null;
     experts: null;
 }
+
+//mv
+export type getSearchMvType = {
+    result: {
+        mvs: Mv[],
+        mvCount: number,
+        [key: string]: any
+    },
+    [key: string]: any
+}
+export interface Mv {
+    id: number;
+    cover: string;
+    name: string;
+    playCount: number;
+    briefDesc: null | string;
+    desc: null;
+    artistName: string;
+    artistId: number;
+    duration: number;
+    mark: number;
+    arTransName: string;
+    artists: Artist[];
+    transNames: null;
+    alias: string[] | null;
+    alg: string;
+}
+
+interface Artist {
+    id: number;
+    name: string;
+    alias: any[];
+    transNames: null;
+}

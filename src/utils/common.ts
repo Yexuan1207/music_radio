@@ -47,7 +47,7 @@ export const formatTime = (time: number) => {
 }
 
 export const getPageOffset = (page: number, limit: number) => {
-    return page * limit
+    return (page - 1) * limit
 }
 
 export const isLast = (index: number, list: any[]) => {

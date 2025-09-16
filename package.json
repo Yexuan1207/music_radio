@@ -11,6 +11,7 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
     "@types/postcss-pxtorem": "^6.1.0",
+    "@vueuse/core": "^13.9.0",
     "axios": "^1.11.0",
     "element-plus": "^2.10.7",
     "good-storage": "^1.1.1",

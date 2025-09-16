@@ -65,9 +65,10 @@
               type="lucide:youtube"
             />
           </div>
-          <p v-if="scope.row.alias.length">
+          <p v-if="scope.row.alias && scope.row.alias.length">
             <HighlightText
-              v-for="item in scope.row.alias"
+              v-for="(item, index) in scope.row.alias"
+              :key="index"
               class="name-desc"
               :text="item"
               :highlightText="props.heighLightText"

@@ -102,6 +102,7 @@ const getSongList = async (playlistData: Playlist) => {
     })
   );
   songs.value = newSongs;
+  console.log(songs.value);
 };
 
 //搜索框内容样式

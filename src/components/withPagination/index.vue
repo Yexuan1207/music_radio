@@ -18,7 +18,7 @@ import type { getAllMvsApiType } from "@/api/Mv/type";
 import { inject, onMounted, ref, watch } from "vue";
 const currentPage = ref(1);
 const $utils: any = inject("utils");
-const eimt = defineEmits(["getDataSucess", "getDataError"]);
+const emit = defineEmits(["getDataSucess", "getDataError"]);
 const props = withDefaults(
   defineProps<{
     getData: Function;
@@ -38,17 +38,17 @@ const onPageChange = async () => {
   try {
     const res = await props.getData({
       limit: props.limit,
-      offset: $utils.getPageOffset(props.limit, currentPage.value),
+      offset: $utils.getPageOffset(currentPage.value, props.limit),
       ...props.getDataParams,
     });
-    eimt("getDataSucess", res);
-    if (props.scrollTarget) {
-      console.log(111);
 
+    emit("getDataSucess", res);
+    if (props.scrollTarget) {
       $utils.scrollInto(props.scrollTarget);
     }
   } catch (error) {
-    eimt("getDataError", error);
+    emit("getDataError", error);
+    console.log(error);
   }
 };
 
