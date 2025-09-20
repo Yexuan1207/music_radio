@@ -26,7 +26,7 @@ const $utils: any = inject("utils");
 const props = defineProps<{
   img?: string;
   name: string;
-  desc: string;
+  desc?: string;
 }>();
 </script>
 <style lang="scss" scoped>

@@ -5,8 +5,46 @@
   >
     <!-- 歌曲内容 -->
     <div class="song">
-      <template v-if="hasCurrentSong"></template>
+      <template v-if="hasCurrentSong">
+        <div
+          class="img-wrap"
+          @click="togglePlayerShow"
+        >
+          <div class="mask"></div>
+          <el-image
+            :src="$utils.getImgUrl(musicStore.currentSong?.img, 80)"
+            lazy
+            class="blur"
+          ></el-image>
+          <div class="player-control">
+            <Icon
+              color="white"
+              :size="24"
+              :type="playControlIcon"
+            />
+          </div>
+        </div>
+        <div class="content">
+          <div class="top">
+            <p class="name">{{ musicStore.currentSong?.name }}</p>
+            <p class="split">-</p>
+            <p class="artists">{{ musicStore.currentSong?.artistsText }}</p>
+          </div>
+          <div class="time">
+            <span class="played-time">{{
+              $utils.formatTime(musicStore.currentTime)
+            }}</span>
+            <span class="split">/</span>
+            <span class="total-time">{{
+              $utils.formatTime(
+                musicStore.currentSong && musicStore.currentSong.duration / 1000
+              )
+            }}</span>
+          </div>
+        </div>
+      </template>
     </div>
+
     <!-- 控制台 -->
     <div class="control">
       <Icon
@@ -107,14 +145,14 @@
       @canplay="ready"
       @ended="end"
       @timeupdate="updateTime"
-      ref="audio"
+      ref="audioRef"
     ></audio>
   </div>
 </template>
 <script setup lang="ts">
 import storage from "good-storage";
-import { computed, inject, onMounted, ref } from "vue";
-import { ElPopover } from "element-plus";
+import { computed, inject, nextTick, onMounted, ref, watch } from "vue";
+import { ElPopover, ElImage } from "element-plus";
 import Share from "@/components/share/index.vue";
 import Volume from "@/components/Volume/index.vue";
 import { VOLUME_KEY, playModeMap } from "@/utils";
@@ -127,6 +165,7 @@ const isPlayErrorPromptShow = ref(false); //是否显示播放错误提示
 const songReady = ref(false);
 const volume = ref(storage.get(VOLUME_KEY, DEFAULT_VOLUME)); //当前音量
 const audioRef = ref<HTMLAudioElement>(); //音频元素引用
+const timer = ref();
 //****************控制台
 const pre = () => {
   if (songReady) musicStore.startSong(musicStore.preSong);
@@ -134,11 +173,24 @@ const pre = () => {
 const next = () => {
   if (songReady.value) musicStore.startSong(musicStore.nextSong);
 };
-const togglePlaying = () => {};
+const togglePlaying = () => {
+  if (!musicStore.currentSong) return;
+
+  musicStore.setPlayingState(!musicStore.isPlaying);
+};
+/**       播放audio            */
+const ready = () => {
+  songReady.value = true;
+};
 const playIcon = computed(() => {
   return musicStore.isPlaying
     ? "mingcute:stop-fill"
     : "tabler:player-play-filled";
+});
+const playControlIcon = computed(() => {
+  return musicStore.isPlayerShow
+    ? "hugeicons:arrow-down-double"
+    : "hugeicons:arrow-up-double";
 });
 //分享
 const shareUrl = computed(() => {
@@ -184,15 +236,73 @@ const playedPercent = computed(() => {
 });
 ///////////////////////////////////
 const onProgressChange = (percent: number) => {
-  audioRef.value?.currentTime =
-    musicStore.currentSong?.durationSecond * percent;
+  if (!musicStore.currentSong || !audioRef.value) return;
+  audioRef.value.currentTime = musicStore.currentSong?.durationSecond * percent;
+  musicStore.setPlayingState(true);
 };
-/**       播放audio            */
-const ready = () => {
-  songReady.value = true;
+
+const togglePlayerShow = () => {
+  musicStore.setPlayershow(!musicStore.isPlayerShow);
 };
-const end = () => {};
-const updateTime = () => {};
+watch(
+  () => musicStore.currentSong,
+  (newSong, oldSong) => {
+    if (!newSong?.id && audioRef.value) {
+      audioRef.value.pause();
+      audioRef.value.currentTime = 0;
+      return;
+    }
+    //同一首歌 重置当前时间
+    if (oldSong?.id === newSong?.id) {
+      if (!audioRef.value) return;
+      musicStore.setCurrentTime(0);
+      audioRef.value.currentTime = 0;
+      play();
+      return;
+    }
+    songReady.value = false;
+
+    if (timer.value) {
+      clearTimeout(timer.value);
+    }
+    timer.value = setTimeout(() => {
+      // 避免点击暂停后又自动播放的问题
+      if (musicStore.isPlaying) {
+        play();
+      }
+    }, 1000);
+  }
+);
+watch(
+  () => musicStore.isPlaying,
+  (newVal) => {
+    nextTick(() => {
+      newVal ? play() : pause();
+    });
+  }
+);
+const end = () => {
+  next();
+};
+const updateTime = (e: any) => {
+  const time = e.target.currentTime;
+  musicStore.setCurrentTime(time);
+};
+const play = async () => {
+  if (!songReady.value) return;
+  try {
+    await audioRef.value?.play();
+
+    if (isPlayErrorPromptShow.value) isPlayErrorPromptShow.value = false;
+  } catch (err) {
+    isPlayErrorPromptShow.value = true;
+    musicStore.setPlayingState(false);
+  }
+};
+const pause = () => {
+  audioRef.value?.pause();
+};
+
 onMounted(() => {
   if (audioRef.value) {
     audioRef.value.volume = volume.value;
@@ -227,7 +337,7 @@ onMounted(() => {
       cursor: pointer;
       @include img-wrap(40px);
 
-      img {
+      .el-image {
         &.blur {
           filter: blur(2px);
         }

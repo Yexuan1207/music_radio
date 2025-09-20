@@ -9,6 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@better-scroll/core": "^2.5.1",
+    "@better-scroll/mouse-wheel": "^2.5.1",
+    "@better-scroll/scroll-bar": "^2.5.1",
     "@element-plus/icons-vue": "^2.3.2",
     "@types/postcss-pxtorem": "^6.1.0",
     "@vueuse/core": "^13.9.0",

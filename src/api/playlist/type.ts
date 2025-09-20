@@ -7,6 +7,10 @@ export interface TopPlaylistType {
     playlists: playlist;
     [key: string]: any
 }
+export interface SimiPlaylistType {
+    playlists: playlist[];
+    [key: string]: any
+}
 
 export interface playlist {
     name: string;

@@ -30,6 +30,8 @@ declare module 'vue' {
     Icon2: typeof import('./src/components/search/base/icon2.vue')['default']
     MiniPlayer: typeof import('./src/components/miniPlayer/index.vue')['default']
     MvCard: typeof import('./src/components/mvCard/index.vue')['default']
+    Player: typeof import('./src/components/player/index.vue')['default']
+    Playlist: typeof import('./src/components/playlist/index.vue')['default']
     PlaylistCard: typeof import('./src/components/playlistCard/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

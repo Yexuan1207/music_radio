@@ -80,7 +80,7 @@ const normalizeSongs = computed(() => {
 //点击歌曲
 const onClickSong = (item: SongResult) => {
   musicStore.startSong(normalizeSong(item));
-  musicStore.setPlaylist(normalizeSongs);
+  musicStore.setPlaylist(normalizeSongs.value);
 };
 </script>
 <style lang="scss" scoped>

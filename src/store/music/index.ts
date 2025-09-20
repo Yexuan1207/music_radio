@@ -1,13 +1,12 @@
 import { defineStore } from "pinia";
 import type { createSong, song } from "./type";
-import { getSongImg, shallowEqual } from "@/utils";
+import { getSongImg, isDef, shallowEqual } from "@/utils";
 import storage from "good-storage";
 import { PLAY_HISTORY_KEY } from "@/utils";
 import { computed, ref } from "vue";
 import { playModeMap } from "@/utils";
 const useMusicStore = defineStore('music', () => {
     const currentSong = ref<createSong | null>(null)
-    const playing = ref(false)
     const playHistory = ref(storage.get(PLAY_HISTORY_KEY, []))
     const playlist = ref<createSong[]>([])
     //播放列表显示
@@ -22,6 +21,7 @@ const useMusicStore = defineStore('music', () => {
     const playMode = ref(playModeMap.sequence.code)
     //播放时长
     const currentTime = ref(0)
+    //切换歌曲详情页显示
     const startSong = async (rawSong: any) => {
         const song = Object.assign({}, rawSong)
         if (!song.img && song.albumId) {
@@ -32,10 +32,12 @@ const useMusicStore = defineStore('music', () => {
 
         // 历史记录
         const playHistoryCopy = [...playHistory.value]
-        const findedIndex = playHistoryCopy.find(item => item.id === song.id)
+        const findedIndex = playHistoryCopy.findIndex(item => item.id === song.id)
+
         if (findedIndex !== -1) {
-            playHistoryCopy.slice(findedIndex, 1)
+            playHistoryCopy.splice(findedIndex, 1)
         }
+
         playHistoryCopy.unshift(song)
         playHistory.value = playHistoryCopy
         storage.set(PLAY_HISTORY_KEY, playHistoryCopy)
@@ -48,9 +50,13 @@ const useMusicStore = defineStore('music', () => {
     const setPlaylistShow = () => {
         isPlaylistShow.value = !isPlaylistShow.value
     }
+    //
+    const setPlayingState = (value: boolean) => {
+        isPlaying.value = value
+    }
     //播放列表
     const addToPlaylist = (song: any) => {
-        const copy = [...playlist.value]
+        const copy = playlist.value.slice()
         if (!copy.find(item => item.id === song.id)) {
             copy.unshift(song)
             const oldPlaylist = [...playlist.value]
@@ -67,6 +73,7 @@ const useMusicStore = defineStore('music', () => {
     const setPlaylist = (newPlaylist: any) => {
         const oldPlaylist = [...playlist.value]
         playlist.value = newPlaylist
+
         if (!isPlaylistPromptShow.value && !shallowEqual(oldPlaylist, newPlaylist, 'id')) {
             isPlaylistPromptShow.value = true
             setTimeout(() => {
@@ -74,7 +81,12 @@ const useMusicStore = defineStore('music', () => {
             }, 2000);
         }
     }
-
+    const setCurrentTime = (time: number) => {
+        currentTime.value = time;
+    }
+    const setPlayershow = (value: boolean) => {
+        isPlayerShow.value = value
+    }
     //下一首&下一首
     const currentIndex = computed(() => {
         return playlist.value.findIndex(item => item.id === currentSong.value?.id)
@@ -135,11 +147,27 @@ const useMusicStore = defineStore('music', () => {
         const index = getNextStart()
         return playlist.value[index]
     })
+
+    const hasCurrentSong = computed(() => isDef(currentSong.value?.id))
+
+    //清空播放列表
+    const clearPlaylist = () => {
+        setPlaylist([])
+        currentSong.value = null
+        isPlaying.value = false
+        setCurrentTime(0)
+    }
+    const clearHistory = () => {
+        playHistory.value = []
+        storage.set(PLAY_HISTORY_KEY, playHistory.value)
+
+    }
     return {
-        currentSong, playing, playHistory, playlist, isPlaylistShow,
+        currentSong, playHistory, playlist, isPlaylistShow,
         isPlaylistPromptShow, isPlayerShow, isPlaying, playMode, currentTime,
-        startSong, addToPlaylist, setPlaylist, preSong, nextSong,
-        setPlayMode, setPlaylistShow
+        preSong, nextSong, hasCurrentSong,
+        startSong, addToPlaylist, setPlaylist, setPlayingState, setCurrentTime,
+        setPlayMode, setPlaylistShow, setPlayershow, clearPlaylist, clearHistory
 
     }
 })

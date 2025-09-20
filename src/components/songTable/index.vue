@@ -52,7 +52,7 @@
           >
             <HighlightText
               class="song-table-name"
-              :text="scope.row.name"
+              :text="scope.row.name || ''"
               :highlightText="props.heighLightText"
             />
             <!-- 这里添加stop是防止冒泡父组件的点击播放事件 -->
@@ -70,7 +70,7 @@
               v-for="(item, index) in scope.row.alias"
               :key="index"
               class="name-desc"
-              :text="item"
+              :text="item || ''"
               :highlightText="props.heighLightText"
             />
           </p>
@@ -80,7 +80,7 @@
         <div v-if="column.prop === 'artistsText'">
           <HighlightText
             class="song-table-name"
-            :text="scope.row.artistsText"
+            :text="scope.row.artistsText || ''"
             :highlightText="props.heighLightText"
           />
         </div>
@@ -155,6 +155,7 @@ const showColumns = computed(() => {
 
 //index部分 播放
 const isActiveSong = (song: Song) => {
+  if (!musicStore.currentSong) return;
   return musicStore.currentSong.id === song.id;
 };
 //点击每行

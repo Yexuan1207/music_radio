@@ -152,3 +152,21 @@ interface Ar {
     tns: any[];
     alias: any[];
 }
+
+//***********       歌词            ***************** */
+export interface lyricType {
+    sgc: boolean;
+    sfy: boolean;
+    qfy: boolean;
+    lrc: Lrc;
+    klyric: Lrc;
+    tlyric: Lrc;
+    romalrc: Lrc;
+    code: number;
+    [key: string]: any;
+}
+
+export interface Lrc {
+    version: number;
+    lyric: string;
+}
